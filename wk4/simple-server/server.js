@@ -1,8 +1,23 @@
 import express from 'express'
+import Sequelize from 'sequelize'
 
-const app = express()
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: 'votes.db'
+})
 
-app.locals.votes = [{
+const Vote = sequelize.define('vote', {
+  category: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true
+  },
+  votes: Sequelize.INTEGER
+})
+
+await sequelize.sync({ alter: true })
+
+const sampleVotes = [{
   category: 'red',
   votes: 10
 }, {
@@ -12,6 +27,14 @@ app.locals.votes = [{
   category: 'blue',
   votes: 4
 }]
+
+try {
+  await Vote.bulkCreate(sampleVotes)
+} catch (error) {
+  console.log('colors already loaded')
+}
+
+const app = express()
 
 app.use((req, res, next) => {
   console.log(req.url)
@@ -25,13 +48,24 @@ app.get('/ping', (req, res) => {
   res.send('pingpong')
 })
 
-app.get('/votes', (req, res) => {
-  res.status(200).json(app.locals.votes)
+app.get('/votes', async (req, res) => {
+  try {
+    const votes = await Vote.findAll()
+    res.status(200).json(votes)
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'an error has occured' })
+  }
 })
 
-app.post('/votes', (req, res) => {
-  app.locals.votes.push(req.body)
-  res.status(201).send('added')
+app.post('/votes', async (req, res) => {
+  try {
+    await Vote.create(req.body)
+    res.status(201).json({ message: 'added vote' })  
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'an error has occured' })    
+  }
 })
 
 app.listen(8080)
