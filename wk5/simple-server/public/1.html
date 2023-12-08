@@ -1,0 +1,25 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    window.onload = () => {
+      const goBtn = document.getElementById('goBtn')
+      const nameInput = document.getElementById('nameInput')
+      const display = document.getElementById('display')
+      goBtn.addEventListener('click', () => {
+        const name = nameInput.value
+        display.innerHTML = `Hello to ${name} from the web!`
+      })   
+    }
+  </script>
+</head>
+<body>
+  <input type="text" placeholder="your name" id="nameInput" />
+  <input type="button" value="Go!" id="goBtn" />
+  <div id="display">
+    Hello from the web!
+  </div>
+</body>
+</html>

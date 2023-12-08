@@ -1,0 +1,112 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script type="module">
+    import { reactive, html, watch } from 'https://esm.sh/@arrow-js/core'
+
+    window.onload = () => {
+      const root = document.getElementById('root')
+      
+      const voteForm = html`
+        <div>i will be the vote form</div>
+      `
+
+      const voteList = html`
+        <div>i will be the vote list</div>
+      `
+
+      const viz = html`
+        <h1>Data vizualization</h1>
+        ${voteForm}
+        ${voteList}
+      `
+      
+      viz(root)
+    }
+
+    
+  </script>
+  <!-- <script>
+    window.onload = async () => {
+      const chart = document.getElementById('chart')
+      const addBtn = document.getElementById('addBtn')
+      const color = document.getElementById('color')
+      const votes = document.getElementById('votes')
+
+      addBtn.onclick = async () => {
+        const payload = {
+          category: color.value,
+          votes: votes.value
+        }
+
+        await fetch('http://localhost:8080/votes', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        })
+
+        loadAll()
+      }
+
+      let labels = []
+      let values = []
+
+      const c = new Chart(chart, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: '# of Votes',
+            data: values,
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      })
+
+      loadAll()
+
+      async function loadAll() {
+        try {
+          const response = await fetch('http://localhost:8080/votes')
+          const data = await response.json()
+          labels = data.map(e => e.category)
+          values = data.map(e => e.votes)
+          c.data.labels = labels
+          c.data.datasets = [{
+            label: '# of Votes',
+            data: values,
+            borderWidth: 1
+          }]
+          c.update()
+        } catch (error) {
+          console.log(error)
+        }
+      }
+   
+    }
+  </script> -->
+</head>
+<body>
+  <div id="root"></div>
+  <!-- <div>
+    <canvas id="chart"></canvas>
+  </div>
+  <div>
+    <input type="text" id="color" placeholder="color">
+    <input type="text" id="votes" placeholder="votes">
+    <input type="button" value="add" id="addBtn">
+  </div> -->
+</body>
+</html>
